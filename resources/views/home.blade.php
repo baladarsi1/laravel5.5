@@ -14,7 +14,10 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                        <div class="container" id="app">
+                            <image-component></image-component>
+                        </div>
+
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@ class ImageService
 
     public function createImage($requestImage,$imageName,$imagePath)
     {
-        \Image::make($requestImage)->save(public_path($imagePath).$imageName);
+        \Image::make($requestImage)->save($imagePath.$imageName);
     }
 
     public function editImage()

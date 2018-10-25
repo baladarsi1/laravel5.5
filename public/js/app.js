@@ -46365,6 +46365,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -46418,123 +46434,187 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [_vm._v("Images list")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "panel-body" }, [
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.images, function(image, index) {
-              return _c("tr", [
-                _c("td", [_vm._v(_vm._s(image.id))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(image.image_name))]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("img", {
-                    attrs: { src: "images/thumbs/" + image.image_name }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("div", { staticClass: "dropdown" }, [
-                    _vm._m(1, true),
-                    _vm._v(" "),
-                    _c(
-                      "ul",
-                      {
-                        staticClass: "dropdown-menu",
-                        attrs: { role: "menu", "aria-labelledby": "menu1" }
-                      },
-                      [
-                        _c("li", { attrs: { role: "presentation" } }, [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                role: "menuitem",
-                                tabindex: "-1",
-                                href: "#"
-                              },
-                              on: {
-                                click: function($event) {
-                                  _vm.shareImage(image.id, index)
+    _c(
+      "div",
+      { staticClass: "panel panel-default" },
+      [
+        _c("div", { staticClass: "panel-heading" }, [_vm._v("Images list")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "panel-body" }, [
+          _c("table", { staticClass: "table table-bordered table-striped" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.images, function(image, index) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(image.id))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(image.image_name))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("img", {
+                      attrs: { src: "images/thumbs/" + image.image_name }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("div", { staticClass: "dropdown" }, [
+                      _vm._m(1, true),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        {
+                          staticClass: "dropdown-menu",
+                          attrs: { role: "menu", "aria-labelledby": "menu1" }
+                        },
+                        [
+                          _c("li", { attrs: { role: "presentation" } }, [
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  role: "menuitem",
+                                  tabindex: "-1",
+                                  href: "#"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.shareImage(image.id, index)
+                                  }
                                 }
-                              }
-                            },
-                            [_vm._v("Share")]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("li", { attrs: { role: "presentation" } }, [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                role: "menuitem",
-                                tabindex: "-1",
-                                href: "images/" + image.image_name,
-                                download: ""
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                        Download\n                                    "
-                              )
-                            ]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("li", { attrs: { role: "presentation" } }, [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                role: "menuitem",
-                                tabindex: "-1",
-                                href: "#"
                               },
-                              on: {
-                                click: function($event) {
-                                  _vm.renameImage(image.id, index)
+                              [_vm._v("Share")]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("li", { attrs: { role: "presentation" } }, [
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  role: "menuitem",
+                                  tabindex: "-1",
+                                  href: "images/" + image.image_name,
+                                  download: ""
                                 }
-                              }
-                            },
-                            [_vm._v("Rename")]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("li", { attrs: { role: "presentation" } }, [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                role: "menuitem",
-                                tabindex: "-1",
-                                href: "#"
                               },
-                              on: {
-                                click: function($event) {
-                                  _vm.deleteImage(image.id, index)
+                              [
+                                _vm._v(
+                                  "\n                                        Download\n                                    "
+                                )
+                              ]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("li", { attrs: { role: "presentation" } }, [
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  role: "menuitem",
+                                  tabindex: "-1",
+                                  href: "#"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.renameImage(image.id, index)
+                                  }
                                 }
-                              }
-                            },
-                            [_vm._v("Delete")]
-                          )
-                        ])
-                      ]
-                    )
+                              },
+                              [_vm._v("Rename")]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("li", { attrs: { role: "presentation" } }, [
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  role: "menuitem",
+                                  tabindex: "-1",
+                                  href: "#"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteImage(image.id, index)
+                                  }
+                                }
+                              },
+                              [_vm._v("Delete")]
+                            )
+                          ])
+                        ]
+                      )
+                    ])
                   ])
                 ])
-              ])
-            })
-          )
-        ])
-      ])
-    ])
+              })
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "btn",
+          {
+            attrs: { color: "primary" },
+            nativeOn: {
+              click: function($event) {
+                _vm.modal = true
+              }
+            }
+          },
+          [_vm._v("Launch demo modal")]
+        ),
+        _vm._v(" "),
+        _vm.modal
+          ? _c(
+              "modal",
+              {
+                on: {
+                  close: function($event) {
+                    _vm.modal = false
+                  }
+                }
+              },
+              [
+                _c(
+                  "modal-header",
+                  [_c("modal-title", [_vm._v("Modal title")])],
+                  1
+                ),
+                _vm._v(" "),
+                _c("modal-body", [_vm._v("...")]),
+                _vm._v(" "),
+                _c(
+                  "modal-footer",
+                  [
+                    _c(
+                      "btn",
+                      {
+                        attrs: { color: "secondary" },
+                        nativeOn: {
+                          click: function($event) {
+                            _vm.modal = false
+                          }
+                        }
+                      },
+                      [_vm._v("Close")]
+                    ),
+                    _vm._v(" "),
+                    _c("btn", { attrs: { color: "primary" } }, [
+                      _vm._v("Save changes")
+                    ])
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          : _vm._e()
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = [

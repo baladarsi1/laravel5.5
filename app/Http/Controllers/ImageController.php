@@ -22,6 +22,11 @@ class ImageController extends Controller
         $this->userImageService = $userImageService;
     }
 
+    private function getImagePath()
+    {
+        return public_path($this->userUploadPath);
+    }
+
     public function store(Request $request)
     {
         try
@@ -30,7 +35,7 @@ class ImageController extends Controller
             {
                 $image = $request->get('image');
                 $imageName = getImageNameFromBrowserRequest($image);
-                $this->imageService->createImage($request->get('image'),$imageName,$this->userUploadPath);
+                $this->imageService->createImage($request->get('image'),$imageName,$this->getImagePath());
                 $this->userImageService->createUserImage($request->user()->id,$imageName);
             }
 

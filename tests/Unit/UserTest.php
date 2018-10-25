@@ -55,6 +55,6 @@ class UserTest extends TestCase
         $user = factory(User::class)->make();
         $userImages = factory(FileUpload::class)->make();
 
-        
+
     }
 }

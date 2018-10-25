@@ -42,6 +42,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 
@@ -51,9 +52,16 @@
 
 <script>
 
+    // import it
+    import Modal from '../modal.vue';
+
     export default {
-        data: function () {
+        components: {
+            Modal
+        },
+        data() {
             return {
+                showModal: false,
                 images: []
             }
         },

@@ -39,7 +39,16 @@
                             <div class="col-md-6">
                                 <router-view></router-view>
                             </div>
+
+                            <template>
+                                <div id="wrapper" class="container">
+                                    <modal></modal>
+                                </div>
+                            </template>
+
                         </div>
+
+
 
                 </div>
             </div>

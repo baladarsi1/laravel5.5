@@ -27,4 +27,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Get the comments for the blog post.
+     */
+    public function userImages()
+    {
+        return $this->hasMany('App\FileUpload' , 'user_id');
+    }
 }

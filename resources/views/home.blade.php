@@ -14,8 +14,31 @@
                         </div>
                     @endif
 
-                        <div class="container" id="app">
-                            <image-component></image-component>
+                        <div id="app">
+                            <h1>Hello App!</h1>
+                            <div class="col-md-6">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <router-link to="/foo" class="nav-link active">Go to Foo</router-link>
+                                    </li>
+                                    <li class="nav-item">
+                                        <router-link to="/bar" class="nav-link">Go to Bar</router-link>
+                                    </li>
+                                    <li class="nav-item">
+                                        <router-link to="/uploadImage" class="nav-link">upload Image</router-link>
+                                    </li>
+                                    <li class="nav-item">
+                                        <router-link to="/companiesIndex" class="nav-link">my Companies</router-link>
+                                    </li>
+                                    <li class="nav-item">
+                                        <router-link to="/imagesIndex" id="imageIndex" class="nav-link">my Images</router-link>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-md-6">
+                                <router-view></router-view>
+                            </div>
                         </div>
 
                 </div>

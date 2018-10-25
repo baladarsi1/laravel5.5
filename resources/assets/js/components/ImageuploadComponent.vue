@@ -51,6 +51,10 @@
                 axios.post('/image/store',{image: this.image}).then(response => {
                     if (response.data.success) {
                         alert(response.data.success);
+                        this.$router.push('ImagesIndex')
+                    }
+                    else{
+                        alert(response.data.error);
                     }
                 });
             }

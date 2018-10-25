@@ -36,3 +36,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/image/store', 'ImageController@store');
+
+Route::get('/user/images', 'ImageController@getUserImages');
+
+

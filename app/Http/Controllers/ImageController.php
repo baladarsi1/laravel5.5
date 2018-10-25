@@ -1,25 +1,58 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\FileUpload;
+use App\Services\ImageService;
+use App\Services\UserImageService;
 
 use Illuminate\Http\Request;
 
 class ImageController extends Controller
 {
+    private $userUploadPath = 'images/';
+
+    /** @var  imageService */
+    protected $imageService;
+
+    /** @var  userImageService */
+    protected $userImageService;
+
+    public function __construct(ImageService $imageService, UserImageService $userImageService)
+    {
+        $this->imageService = $imageService;
+        $this->userImageService = $userImageService;
+    }
+
     public function store(Request $request)
     {
-        if($request->get('image'))
+        try
         {
-            $image = $request->get('image');
-            $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-            \Image::make($request->get('image'))->save(public_path('images/').$name);
+            if($request->get('image'))
+            {
+                $image = $request->get('image');
+                $imageName = getImageNameFromBrowserRequest($image);
+                $this->imageService->createImage($request->get('image'),$imageName,$this->userUploadPath);
+                $this->userImageService->createUserImage($request->user()->id,$imageName);
+            }
+
+            return response()->json(['success' => 'You have successfully uploaded an image'], 200);
         }
-
-        $image= new FileUpload();
-        $image->image_name = $name;
-        $image->save();
-
-        return response()->json(['success' => 'You have successfully uploaded an image'], 200);
+        catch (\Exception $e)
+        {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
+
+    public function getUserImages(Request $request)
+    {
+        try
+        {
+            return $this->userImageService->getAllUserImages($request->user());
+        }
+        catch (\Exception $e)
+        {
+            \Log::error('user Image Errors' , [$e->getMessage()]);
+        }
+    }
+
+
 }

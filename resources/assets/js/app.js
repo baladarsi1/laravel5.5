@@ -10,15 +10,34 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import VueRouter from 'vue-router';
+import ImageComponent from './components/ImageuploadComponent.vue';
+import CompaniesIndex from './components/companies/CompaniesIndex.vue';
+import ImagesIndex from './components/images/ImagesIndex.vue';
+import ImageEdit from './components/images/ImageEdit.vue';
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+window.Vue.use(VueRouter);
 
-Vue.component('image-component', require('./components/ImageuploadComponent.vue'));
+const Foo = { template: '<div>foo</div>' }
+const Bar = { template: '<div>bar</div>' }
+
+const routes = [
+    { path: '/foo', component: Foo },
+    { path: '/bar', component: Bar },
+    { path: '/uploadImage', component: ImageComponent, name: ImageComponent},
+    { path: '/companiesIndex', component: CompaniesIndex},
+    { path: '/imagesIndex', component: ImagesIndex},
+    { path: '/imageEdit', component: ImageEdit},
+]
+
+const router = new VueRouter({
+    routes // short for `routes: routes`
+})
 
 const app = new Vue({
-    el: '#app'
-});
+    router
+}).$mount('#app')
+
+
+
+

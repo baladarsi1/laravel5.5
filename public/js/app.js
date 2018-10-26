@@ -377,6 +377,33 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -480,33 +507,6 @@ module.exports = function normalizeComponent (
     options: options
   }
 }
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
 
 
 /***/ }),
@@ -1072,7 +1072,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(11);
-module.exports = __webpack_require__(54);
+module.exports = __webpack_require__(52);
 
 
 /***/ }),
@@ -1088,7 +1088,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_companies_CompaniesIndex_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_companies_CompaniesIndex_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_images_ImagesIndex_vue__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_images_ImagesIndex_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_images_ImagesIndex_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_images_ImageEdit_vue__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_images_ImageEdit_vue__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_images_ImageEdit_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_images_ImageEdit_vue__);
 // app.js
 
@@ -18296,7 +18296,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(14)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(14)(module)))
 
 /***/ }),
 /* 14 */
@@ -42934,7 +42934,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(37).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(37).setImmediate))
 
 /***/ }),
 /* 37 */
@@ -43004,7 +43004,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
 /* 38 */
@@ -43197,7 +43197,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(5)))
 
 /***/ }),
 /* 39 */
@@ -45834,7 +45834,7 @@ if (inBrowser && window.Vue) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(41)
 /* template */
@@ -46013,7 +46013,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(44)
 /* template */
@@ -46269,11 +46269,11 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(47)
 /* template */
-var __vue_template__ = __webpack_require__(50)
+var __vue_template__ = __webpack_require__(48)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46317,8 +46317,6 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modal_vue__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__modal_vue__);
 //
 //
 //
@@ -46371,15 +46369,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
-
-// import it
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: {
-        Modal: __WEBPACK_IMPORTED_MODULE_0__modal_vue___default.a
-    },
     data: function data() {
         return {
             showModal: false,
@@ -46402,6 +46417,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         renameImage: function renameImage(id, index) {
             alert("rename" + id);
+            this.showModal = true;
         },
         deleteImage: function deleteImage(id, index) {
             alert("delete" + id);
@@ -46411,91 +46427,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(1)
-/* script */
-var __vue_script__ = null
-/* template */
-var __vue_template__ = __webpack_require__(49)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/modal.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-514744a6", Component.options)
-  } else {
-    hotAPI.reload("data-v-514744a6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("transition", { attrs: { name: "modal" } }, [
-    _c("div", { staticClass: "modal", staticStyle: { display: "block" } }, [
-      _c("div", { staticClass: "modal-dialog", attrs: { role: "document" } }, [
-        _c("div", { staticClass: "modal-content" }, [
-          _c("div", { staticClass: "modal-header" }, [
-            _c("h4", { staticClass: "modal-title" }, [
-              _vm._v(
-                "\n                        Modal title\n                    "
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "modal-body" }),
-          _vm._v(" "),
-          _c("div", { staticClass: "modal-footer" })
-        ])
-      ])
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-514744a6", module.exports)
-  }
-}
-
-/***/ }),
-/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46511,6 +46442,19 @@ var render = function() {
           "router-link",
           { staticClass: "btn btn-success", attrs: { to: "/uploadImage" } },
           [_vm._v("Upload new image")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            attrs: { id: "show-modal" },
+            on: {
+              click: function($event) {
+                _vm.showModal = true
+              }
+            }
+          },
+          [_vm._v("Show Modal")]
         )
       ],
       1
@@ -46632,6 +46576,56 @@ var render = function() {
           )
         ])
       ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "container", attrs: { id: "wrapper" } }, [
+      _vm.showModal
+        ? _c(
+            "div",
+            [
+              _c("transition", { attrs: { name: "modal" } }, [
+                _c("div", { staticClass: "modal-mask" }, [
+                  _c("div", { staticClass: "modal-wrapper" }, [
+                    _c("div", { staticClass: "modal-dialog" }, [
+                      _c("div", { staticClass: "modal-content" }, [
+                        _c("div", { staticClass: "modal-header" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "close",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  _vm.showModal = false
+                                }
+                              }
+                            },
+                            [
+                              _c("span", { attrs: { "aria-hidden": "true" } }, [
+                                _vm._v("×")
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("h4", { staticClass: "modal-title" }, [
+                            _vm._v("Modal title")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "modal-body" }, [
+                          _vm._v(
+                            "\n                                    modal body\n                                "
+                          )
+                        ])
+                      ])
+                    ])
+                  ])
+                ])
+              ])
+            ],
+            1
+          )
+        : _vm._e()
     ])
   ])
 }
@@ -46679,15 +46673,15 @@ if (false) {
 }
 
 /***/ }),
-/* 51 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(2)
 /* script */
-var __vue_script__ = __webpack_require__(52)
+var __vue_script__ = __webpack_require__(50)
 /* template */
-var __vue_template__ = __webpack_require__(53)
+var __vue_template__ = __webpack_require__(51)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46726,7 +46720,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 52 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46825,7 +46819,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 53 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -47036,7 +47030,7 @@ if (false) {
 }
 
 /***/ }),
-/* 54 */
+/* 52 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

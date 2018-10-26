@@ -17,31 +17,7 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12 form-group">
-                            <label class="control-label">Company address</label>
-                            <input type="text" v-model="company.address" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 form-group">
-                            <label class="control-label">Company website</label>
-                            <input type="text" v-model="company.website" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 form-group">
-                            <label class="control-label">Company Country</label>
-                            <select v-model="company.country" class="form-control">
-                                <option disabled value="">Please select one</option>
-                                <option>AU</option>
-                                <option>UK</option>
-                                <option>US</option>
-                            </select>
-                            <span>Selected: {{ company.country }}</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 form-group">
-                            <button class="btn btn-success">Create</button>
+                            <button class="btn btn-success">Save</button>
                         </div>
                     </div>
                 </form>
@@ -56,10 +32,10 @@
         mounted() {
             let app = this;
             let id = app.$route.params.id;
-            app.companyId = id;
-            axios.get('/api/v1/companies/' + id)
+            app.imageId = id;
+            axios.get('/api/v1/images/' + id)
                 .then(function (resp) {
-                    app.company = resp.data;
+                    app.image = resp.data;
                 })
                 .catch(function () {
                     alert("Could not load your company")
@@ -67,13 +43,9 @@
         },
         data: function () {
             return {
-                companyId: null,
-                company: {
+                imageId: null,
+                image: {
                     name: '',
-                    address: '',
-                    website: '',
-                    email: '',
-                    country: ''
                 }
             }
         },
@@ -81,14 +53,14 @@
             saveForm() {
                 event.preventDefault();
                 var app = this;
-                var newCompany = app.company;
-                axios.patch('/api/v1/companies/' + app.companyId, newCompany)
+                var newImage = app.image;
+                axios.patch('/api/v1/images/' + app.imageId, newImage)
                     .then(function (resp) {
                         app.$router.replace('/');
                     })
                     .catch(function (resp) {
                         console.log(resp);
-                        alert("Could not create your company");
+                        alert("Could not update your image");
                     });
             }
         }

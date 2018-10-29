@@ -1,8 +1,7 @@
 <template>
     <div>
         <div class="form-group">
-            <router-link to="/uploadImage" class="btn btn-success">Upload new image</router-link>
-            <button id="show-modal" @click="showModal = true">Show Modal</button>
+            <button id="show-modal" @click="showModal = true">Upload new image</button>
         </div>
 
         <div class="panel panel-default">
@@ -33,7 +32,7 @@
                                             Download
                                         </a>
                                     </li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="renameImage(image.id, index)">Rename</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="renameImage(image.id, index, image.image_name)">Rename</a></li>
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="deleteImage(image.id, index)">Delete</a>
                                     </li>
                                 </ul>
@@ -45,47 +44,18 @@
             </div>
         </div>
 
-        <div id="wrapper" class="container">
-            <div v-if="showModal">
-                <transition name="modal">
-                    <div class="modal-mask">
-                        <div class="modal-wrapper">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" @click="showModal=false">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        <h4 class="modal-title">Modal title</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        modal body
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </transition>
-            </div>
+        <div class="row">
+            <!-- use the modal component, pass in the prop -->
+            <modal v-if="showModal" @close="showModal = false">
+
+               <h3 slot="header">custom header</h3>
+            </modal>
         </div>
 
     </div>
 </template>
 
-
 <script>
-
-    Vue.component('modal', {
-        template: '#modal-template',
-        props: ['show'],
-        methods: {
-            savePost: function () {
-                // Some save logic goes here...
-
-                this.$emit('close');
-            }
-        }
-    });
 
     export default {
         data() {
@@ -109,12 +79,25 @@
             shareImage(id, index) {
                 alert("share"+id);
             },
-            renameImage(id, index) {
-                alert("rename"+id);
+            renameImage(id, index, imageName) {
                 this.showModal = true;
+
             },
             deleteImage(id, index) {
                 alert("delete"+id);
+            },
+            submitRenameImage() {
+                event.preventDefault();
+                var app = this;
+                var newCompany = app.company;
+                axios.patch('/api/v1/companies/' + app.companyId, newCompany)
+                    .then(function (resp) {
+                        app.$router.replace('/');
+                    })
+                    .catch(function (resp) {
+                        console.log(resp);
+                        alert("Could not create your company");
+                    });
             }
         }
     }

@@ -1119,6 +1119,13 @@ var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
     routes: routes // short for `routes: routes`
 });
 
+// register modal component
+Vue.component('modal', {
+    template: '#modal-template'
+});
+
+Vue.component('ImageComponent', __WEBPACK_IMPORTED_MODULE_1__components_ImageuploadComponent_vue___default.a);
+
 var app = new Vue({
     router: router
 }).$mount('#app');
@@ -45936,7 +45943,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.post('/image/store', { image: this.image }).then(function (response) {
                 if (response.data.success) {
-                    alert(response.data.success);
+                    _this.showModal = false;
                     _this.$router.push('ImagesIndex');
                 } else {
                     alert(response.data.error);
@@ -46374,24 +46381,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -46415,12 +46404,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         shareImage: function shareImage(id, index) {
             alert("share" + id);
         },
-        renameImage: function renameImage(id, index) {
-            alert("rename" + id);
+        renameImage: function renameImage(id, index, imageName) {
             this.showModal = true;
         },
         deleteImage: function deleteImage(id, index) {
             alert("delete" + id);
+        },
+        submitRenameImage: function submitRenameImage() {
+            event.preventDefault();
+            var app = this;
+            var newCompany = app.company;
+            axios.patch('/api/v1/companies/' + app.companyId, newCompany).then(function (resp) {
+                app.$router.replace('/');
+            }).catch(function (resp) {
+                console.log(resp);
+                alert("Could not create your company");
+            });
         }
     }
 });
@@ -46434,31 +46433,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          { staticClass: "btn btn-success", attrs: { to: "/uploadImage" } },
-          [_vm._v("Upload new image")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            attrs: { id: "show-modal" },
-            on: {
-              click: function($event) {
-                _vm.showModal = true
-              }
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "button",
+        {
+          attrs: { id: "show-modal" },
+          on: {
+            click: function($event) {
+              _vm.showModal = true
             }
-          },
-          [_vm._v("Show Modal")]
-        )
-      ],
-      1
-    ),
+          }
+        },
+        [_vm._v("Upload new image")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "panel panel-default" }, [
       _c("div", { staticClass: "panel-heading" }, [_vm._v("Images list")]),
@@ -46541,7 +46529,11 @@ var render = function() {
                               },
                               on: {
                                 click: function($event) {
-                                  _vm.renameImage(image.id, index)
+                                  _vm.renameImage(
+                                    image.id,
+                                    index,
+                                    image.image_name
+                                  )
                                 }
                               }
                             },
@@ -46578,55 +46570,30 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "container", attrs: { id: "wrapper" } }, [
-      _vm.showModal
-        ? _c(
-            "div",
-            [
-              _c("transition", { attrs: { name: "modal" } }, [
-                _c("div", { staticClass: "modal-mask" }, [
-                  _c("div", { staticClass: "modal-wrapper" }, [
-                    _c("div", { staticClass: "modal-dialog" }, [
-                      _c("div", { staticClass: "modal-content" }, [
-                        _c("div", { staticClass: "modal-header" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "close",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  _vm.showModal = false
-                                }
-                              }
-                            },
-                            [
-                              _c("span", { attrs: { "aria-hidden": "true" } }, [
-                                _vm._v("×")
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("h4", { staticClass: "modal-title" }, [
-                            _vm._v("Modal title")
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "modal-body" }, [
-                          _vm._v(
-                            "\n                                    modal body\n                                "
-                          )
-                        ])
-                      ])
-                    ])
-                  ])
+    _c(
+      "div",
+      { staticClass: "row" },
+      [
+        _vm.showModal
+          ? _c(
+              "modal",
+              {
+                on: {
+                  close: function($event) {
+                    _vm.showModal = false
+                  }
+                }
+              },
+              [
+                _c("h3", { attrs: { slot: "header" }, slot: "header" }, [
+                  _vm._v("custom header")
                 ])
-              ])
-            ],
-            1
-          )
-        : _vm._e()
-    ])
+              ]
+            )
+          : _vm._e()
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = [
@@ -46754,38 +46721,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
         var app = this;
         var id = app.$route.params.id;
-        app.companyId = id;
-        axios.get('/api/v1/companies/' + id).then(function (resp) {
-            app.company = resp.data;
+        app.imageId = id;
+        axios.get('/api/v1/images/' + id).then(function (resp) {
+            app.image = resp.data;
         }).catch(function () {
             alert("Could not load your company");
         });
@@ -46793,13 +46736,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     data: function data() {
         return {
-            companyId: null,
-            company: {
-                name: '',
-                address: '',
-                website: '',
-                email: '',
-                country: ''
+            imageId: null,
+            image: {
+                name: ''
             }
         };
     },
@@ -46807,12 +46746,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveForm: function saveForm() {
             event.preventDefault();
             var app = this;
-            var newCompany = app.company;
-            axios.patch('/api/v1/companies/' + app.companyId, newCompany).then(function (resp) {
+            var newImage = app.image;
+            axios.patch('/api/v1/images/' + app.imageId, newImage).then(function (resp) {
                 app.$router.replace('/');
             }).catch(function (resp) {
                 console.log(resp);
-                alert("Could not create your company");
+                alert("Could not update your image");
             });
         }
     }
@@ -46886,121 +46825,6 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [
-                  _vm._v("Company address")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.company.address,
-                      expression: "company.address"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.company.address },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.company, "address", $event.target.value)
-                    }
-                  }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [
-                  _vm._v("Company website")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.company.website,
-                      expression: "company.website"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.company.website },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.company, "website", $event.target.value)
-                    }
-                  }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [
-                  _vm._v("Company Country")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.company.country,
-                        expression: "company.country"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.company,
-                          "country",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
-                    }
-                  },
-                  [
-                    _c("option", { attrs: { disabled: "", value: "" } }, [
-                      _vm._v("Please select one")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("AU")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("UK")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("US")])
-                  ]
-                ),
-                _vm._v(" "),
-                _c("span", [_vm._v("Selected: " + _vm._s(_vm.company.country))])
-              ])
-            ]),
-            _vm._v(" "),
             _vm._m(0)
           ]
         )
@@ -47015,7 +46839,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-xs-12 form-group" }, [
-        _c("button", { staticClass: "btn btn-success" }, [_vm._v("Create")])
+        _c("button", { staticClass: "btn btn-success" }, [_vm._v("Save")])
       ])
     ])
   }

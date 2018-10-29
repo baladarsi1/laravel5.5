@@ -50,7 +50,7 @@
             uploadImage(){
                 axios.post('/image/store',{image: this.image}).then(response => {
                     if (response.data.success) {
-                        alert(response.data.success);
+                        this.showModal = false;
                         this.$router.push('ImagesIndex')
                     }
                     else{

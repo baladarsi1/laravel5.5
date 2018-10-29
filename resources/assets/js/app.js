@@ -34,6 +34,13 @@ const router = new VueRouter({
     routes // short for `routes: routes`
 })
 
+// register modal component
+Vue.component('modal', {
+    template: '#modal-template'
+})
+
+Vue.component('ImageComponent' , ImageComponent);
+
 const app = new Vue({
     router
 }).$mount('#app')

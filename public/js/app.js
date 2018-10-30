@@ -1125,6 +1125,7 @@ Vue.component('modal', {
 });
 
 Vue.component('ImageComponent', __WEBPACK_IMPORTED_MODULE_1__components_ImageuploadComponent_vue___default.a);
+Vue.component('ImageEdit', __WEBPACK_IMPORTED_MODULE_4__components_images_ImageEdit_vue___default.a);
 
 var app = new Vue({
     router: router
@@ -46381,13 +46382,114 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
             showModal: false,
-            images: []
+            showSecondModal: false,
+            images: [],
+            updatedImageName: '',
+            image: ''
         };
     },
     mounted: function mounted() {
@@ -46401,25 +46503,75 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        onImageChange: function onImageChange(e) {
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length) return;
+            this.createImage(files[0]);
+        },
+        createImage: function createImage(file) {
+            var reader = new FileReader();
+            var vm = this;
+            reader.onload = function (e) {
+                vm.image = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        },
+        uploadImage: function uploadImage() {
+            var _this = this;
+
+            axios.post('/image/store', { image: this.image }).then(function (response) {
+                if (response.data.success) {
+                    _this.showModal = false;
+                    _this.$router.push('ImagesIndex');
+                } else {
+                    alert(response.data.error);
+                }
+            });
+        },
+        openModalGetImage: function openModalGetImage(id) {
+            var _this2 = this;
+
+            //console.log(id);
+            axios.get('/user/image/' + id).then(function (response) {
+                console.log(response); // show if success
+                _this2.updatedImageName = response.data; //we are putting data into our posts array
+            }).catch(function (error) {
+                console.log(error); // run if we have error
+            });
+        },
         shareImage: function shareImage(id, index) {
-            alert("share" + id);
+            this.showSecondModal = true;
         },
         renameImage: function renameImage(id, index, imageName) {
-            this.showModal = true;
+            this.showSecondModal = true;
+            this.message = 'updated';
         },
-        deleteImage: function deleteImage(id, index) {
-            alert("delete" + id);
-        },
-        submitRenameImage: function submitRenameImage() {
-            event.preventDefault();
-            var app = this;
-            var newCompany = app.company;
-            axios.patch('/api/v1/companies/' + app.companyId, newCompany).then(function (resp) {
-                app.$router.replace('/');
-            }).catch(function (resp) {
-                console.log(resp);
-                alert("Could not create your company");
+        deleteImage: function deleteImage(id) {
+            var _this3 = this;
+
+            axios.post('/user/image/deleteImage/' + id, {}).then(function (response) {
+                if (response.status === 200) {
+                    _this3.$router.go(0);
+                }
+            }).catch(function (error) {
+                console.log(error); // run if we have error
             });
+        },
+        updateImageName: function updateImageName(id) {
+            var _this4 = this;
+
+            axios.post('/user/image/updateImageName/' + id, {
+                updatedImageName: this.updatedImageName
+            }).then(function (response) {
+                if (response.status === 200) {
+                    _this4.$router.go(0);
+                }
+            }).catch(function (error) {
+                console.log(error); // run if we have error
+            });
+        },
+        completedImageUpload: function completedImageUpload() {
+            this.$router.go(0);
         }
     }
 });
@@ -46433,27 +46585,14 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "form-group" }, [
-      _c(
-        "button",
-        {
-          attrs: { id: "show-modal" },
-          on: {
-            click: function($event) {
-              _vm.showModal = true
-            }
-          }
-        },
-        [_vm._v("Upload new image")]
-      )
-    ]),
+    _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "panel panel-default" }, [
       _c("div", { staticClass: "panel-heading" }, [_vm._v("Images list")]),
       _vm._v(" "),
       _c("div", { staticClass: "panel-body" }, [
         _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _vm._m(0),
+          _vm._m(1),
           _vm._v(" "),
           _c(
             "tbody",
@@ -46471,7 +46610,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [
                   _c("div", { staticClass: "dropdown" }, [
-                    _vm._m(1, true),
+                    _vm._m(2, true),
                     _vm._v(" "),
                     _c(
                       "ul",
@@ -46487,12 +46626,8 @@ var render = function() {
                               attrs: {
                                 role: "menuitem",
                                 tabindex: "-1",
-                                href: "#"
-                              },
-                              on: {
-                                click: function($event) {
-                                  _vm.shareImage(image.id, index)
-                                }
+                                "data-toggle": "modal",
+                                "data-target": "#myShareModal" + image.id
                               }
                             },
                             [_vm._v("Share")]
@@ -46525,15 +46660,13 @@ var render = function() {
                               attrs: {
                                 role: "menuitem",
                                 tabindex: "-1",
-                                href: "#"
+                                href: "#",
+                                "data-toggle": "modal",
+                                "data-target": "#myRenameModal" + image.id
                               },
                               on: {
                                 click: function($event) {
-                                  _vm.renameImage(
-                                    image.id,
-                                    index,
-                                    image.image_name
-                                  )
+                                  _vm.openModalGetImage(image.id)
                                 }
                               }
                             },
@@ -46548,12 +46681,9 @@ var render = function() {
                               attrs: {
                                 role: "menuitem",
                                 tabindex: "-1",
-                                href: "#"
-                              },
-                              on: {
-                                click: function($event) {
-                                  _vm.deleteImage(image.id, index)
-                                }
+                                href: "#",
+                                "data-toggle": "modal",
+                                "data-target": "#myDeleteModal" + image.id
                               }
                             },
                             [_vm._v("Delete")]
@@ -46561,7 +46691,135 @@ var render = function() {
                         ])
                       ]
                     )
-                  ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: { id: "myShareModal" + image.id, role: "dialog" }
+                    },
+                    [_vm._m(3, true)]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: { id: "myRenameModal" + image.id, role: "dialog" }
+                    },
+                    [
+                      _c("div", { staticClass: "modal-dialog" }, [
+                        _c("div", { staticClass: "modal-content" }, [
+                          _vm._m(4, true),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-body" }, [
+                            _c("p", [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.updatedImageName,
+                                    expression: "updatedImageName"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                domProps: { value: _vm.updatedImageName },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.updatedImageName = $event.target.value
+                                  }
+                                }
+                              })
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-footer" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-default",
+                                attrs: {
+                                  type: "button",
+                                  "data-dismiss": "modal"
+                                }
+                              },
+                              [_vm._v("Close")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-success",
+                                attrs: {
+                                  type: "button",
+                                  "data-dismiss": "modal"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.updateImageName(image.id)
+                                  }
+                                }
+                              },
+                              [_vm._v("Save Changes")]
+                            )
+                          ])
+                        ])
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: { id: "myDeleteModal" + image.id, role: "dialog" }
+                    },
+                    [
+                      _c("div", { staticClass: "modal-dialog" }, [
+                        _c("div", { staticClass: "modal-content" }, [
+                          _vm._m(5, true),
+                          _vm._v(" "),
+                          _vm._m(6, true),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-footer" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-default",
+                                attrs: {
+                                  type: "button",
+                                  "data-dismiss": "modal"
+                                }
+                              },
+                              [_vm._v("Close")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-success",
+                                attrs: {
+                                  type: "button",
+                                  "data-dismiss": "modal"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteImage(image.id)
+                                  }
+                                }
+                              },
+                              [_vm._v("Delete Image")]
+                            )
+                          ])
+                        ])
+                      ])
+                    ]
+                  )
                 ])
               ])
             })
@@ -46572,31 +46830,103 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "row" },
+      {
+        staticClass: "modal fade",
+        attrs: { id: "imageUploadModal", role: "dialog" }
+      },
       [
-        _vm.showModal
-          ? _c(
-              "modal",
-              {
-                on: {
-                  close: function($event) {
-                    _vm.showModal = false
-                  }
-                }
-              },
-              [
-                _c("h3", { attrs: { slot: "header" }, slot: "header" }, [
-                  _vm._v("custom header")
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(7),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c("div", { staticClass: "col-md-8" }, [
+                  _c("div", { staticClass: "card card-default" }, [
+                    _c("div", { staticClass: "card-header" }, [
+                      _vm._v("File Upload Component")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("div", { staticClass: "row" }, [
+                        _vm.image
+                          ? _c("div", { staticClass: "col-md-3" }, [
+                              _c("img", {
+                                staticClass: "img-responsive",
+                                attrs: {
+                                  src: _vm.image,
+                                  height: "70",
+                                  width: "90"
+                                }
+                              })
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c("input", {
+                            staticClass: "form-control",
+                            attrs: { type: "file" },
+                            on: { change: _vm.onImageChange }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-3" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success btn-block",
+                              on: { click: _vm.uploadImage }
+                            },
+                            [_vm._v("Upload Image")]
+                          )
+                        ])
+                      ])
+                    ])
+                  ])
                 ])
-              ]
-            )
-          : _vm._e()
-      ],
-      1
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-default",
+                  attrs: { type: "button", "data-dismiss": "modal" },
+                  on: {
+                    click: function($event) {
+                      _vm.completedImageUpload()
+                    }
+                  }
+                },
+                [_vm._v("Close")]
+              )
+            ])
+          ])
+        ])
+      ]
     )
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c(
+        "button",
+        {
+          attrs: {
+            id: "show-modal",
+            "data-toggle": "modal",
+            "data-target": "#imageUploadModal"
+          }
+        },
+        [_vm._v("Upload new image")]
+      )
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -46628,6 +46958,101 @@ var staticRenderFns = [
         _c("span", { staticClass: "caret" })
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-dialog" }, [
+      _c("div", { staticClass: "modal-content" }, [
+        _c("div", { staticClass: "modal-header" }, [
+          _c(
+            "button",
+            {
+              staticClass: "close",
+              attrs: { type: "button", "data-dismiss": "modal" }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v(" "),
+          _c("h4", { staticClass: "modal-title" }, [_vm._v("Share Image")])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "modal-body" }, [
+          _c("p", [_vm._v("This is share model")])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "modal-footer" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-default",
+              attrs: { type: "button", "data-dismiss": "modal" }
+            },
+            [_vm._v("Close")]
+          )
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("×")]
+      ),
+      _vm._v(" "),
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Rename Image")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("×")]
+      ),
+      _vm._v(" "),
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Delete Image")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-body" }, [
+      _c("p", [_vm._v("Are you sure, do you want to delete the image?")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("×")]
+      ),
+      _vm._v(" "),
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Upload Image")])
+    ])
   }
 ]
 render._withStripped = true
@@ -46717,43 +47142,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        var app = this;
-        var id = app.$route.params.id;
-        app.imageId = id;
-        axios.get('/api/v1/images/' + id).then(function (resp) {
-            app.image = resp.data;
-        }).catch(function () {
-            alert("Could not load your company");
-        });
-    },
-
     data: function data() {
         return {
-            imageId: null,
-            image: {
-                name: ''
-            }
+            message: 'not updated'
         };
-    },
-    methods: {
-        saveForm: function saveForm() {
-            event.preventDefault();
-            var app = this;
-            var newImage = app.image;
-            axios.patch('/api/v1/images/' + app.imageId, newImage).then(function (resp) {
-                app.$router.replace('/');
-            }).catch(function (resp) {
-                console.log(resp);
-                alert("Could not update your image");
-            });
-        }
     }
 });
 
@@ -46766,23 +47160,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          { staticClass: "btn btn-default", attrs: { to: "/" } },
-          [_vm._v("Back")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
     _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [
-        _vm._v("Create new company")
-      ]),
+      _c("div", { staticClass: "panel-heading" }, [_vm._v("Rename Image")]),
       _vm._v(" "),
       _c("div", { staticClass: "panel-body" }, [
         _c(
@@ -46798,30 +47177,10 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-xs-12 form-group" }, [
                 _c("label", { staticClass: "control-label" }, [
-                  _vm._v("Company name")
+                  _vm._v("Image name")
                 ]),
                 _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.company.name,
-                      expression: "company.name"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.company.name },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.company, "name", $event.target.value)
-                    }
-                  }
-                })
+                _c("span", [_vm._v(_vm._s(_vm.message))])
               ])
             ]),
             _vm._v(" "),

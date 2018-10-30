@@ -59,5 +59,57 @@ class ImageController extends Controller
         }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getUserImage($id)
+    {
+        return $this->userImageService->getUserImage($id)->image_name;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateUserImage(Request $request, $id)
+    {
+
+        $image = $this->userImageService->getUserImage($id);
+        $oldImageName = $image->image_name;
+        $newImageName = $request->input('updatedImageName');
+        try
+        {
+            $this->userImageService->updateUserImage($id,$newImageName);
+            $this->imageService->editImage($this->getImagePath(),$oldImageName,$newImageName);
+
+            return response()->json(['data' => 'You have successfully uploaded an image'], 200);
+        }
+        catch (\Exception $e)
+        {
+            \Log::error('update image' , [$e]);
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+
+    }
+
+    public function deleteUserImage(Request $request, $id)
+    {
+        try
+        {
+            $this->userImageService->deleteUserImage($id);
+
+            return response()->json(['data' => 'You have successfully deleted an image'], 200);
+        }
+        catch (\Exception $e)
+        {
+            \Log::error('update image' , [$e]);
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
 
 }

@@ -39,4 +39,10 @@ Route::post('/image/store', 'ImageController@store');
 
 Route::get('/user/images', 'ImageController@getUserImages');
 
+Route::get('/user/image/{id}', 'ImageController@getUserImage');
+
+Route::post('/user/image/updateImageName/{id}', 'ImageController@updateUserImage');
+
+Route::post('/user/image/deleteImage/{id}', 'ImageController@deleteUserImage');
+
 

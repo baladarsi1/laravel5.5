@@ -40,6 +40,7 @@ Vue.component('modal', {
 })
 
 Vue.component('ImageComponent' , ImageComponent);
+Vue.component('ImageEdit' , ImageEdit);
 
 const app = new Vue({
     router

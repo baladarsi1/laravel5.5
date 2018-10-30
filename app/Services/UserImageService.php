@@ -29,13 +29,21 @@ class UserImageService
         $image->save();
     }
 
-    public function editUserImage()
+    public function updateUserImage($userImageId,$newImageName)
     {
-
+       $userImage = FileUpload::find($userImageId);
+       $userImage->image_name = $newImageName;
+       $userImage->save();
     }
 
-    public function deleteUserImage()
+    public function deleteUserImage($userImageId)
     {
+        $userImage = FileUpload::find($userImageId);
+        $userImage->delete();
+    }
 
+    public function getUserImage($imageId)
+    {
+        return FileUpload::find($imageId);
     }
 }

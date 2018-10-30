@@ -10,7 +10,6 @@ namespace App\Observers;
 
 use App\FileUpload;
 
-
 class FileUploadObserver
 {
 
@@ -22,17 +21,13 @@ class FileUploadObserver
      */
     public function created(FileUpload $fileUpload)
     {
-        \Log::info('public/images/'.$fileUpload->image_name);
-
         try
         {
             // open an image file
             $img = \Image::make(public_path('images/'.$fileUpload->image_name));
 
-            \Log::info('public/images/'.$fileUpload->image_name);
-
             // now you are able to resize the instance
-            $img->resize(50, 50);
+            $img->resize(50);
 
             // finally we save the image as a new file
             $img->save(public_path('images/thumbs/'.$fileUpload->image_name));
@@ -43,15 +38,35 @@ class FileUploadObserver
         }
     }
 
-    /**
-     * Listen to the User deleting event.
-     *
-     * @param  \App\User  $user
-     * @return void
-     */
-    public function deleting(User $user)
+    public function deleting(FileUpload $fileUpload)
     {
-        //
-    }
 
+        \Log::error('image deleting observer' , [$fileUpload]);
+
+        try
+        {
+            // open an image file
+            $mainImg = \Image::make(public_path('images/'.$fileUpload->image_name));
+
+            // finally delete the image
+            $mainImg->destroy();
+        }
+        catch (\Exception $e)
+        {
+            \Log::error('image delete' , [$e->getMessage()]);
+        }
+
+        try
+        {
+            // open an image thumb file
+            $thumbImg = \Image::make(public_path('images/thumbs/'.$fileUpload->image_name));
+
+            // finally delete the image
+            $thumbImg->destroy();
+        }
+        catch (\Exception $e)
+        {
+            \Log::error('thumb delete' , [$e->getMessage()]);
+        }
+    }
 }

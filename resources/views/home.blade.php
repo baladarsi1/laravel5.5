@@ -5,41 +5,6 @@
 @stop
 
 @section('content')
-
-        <!-- template for the modal component -->
-        <script type="text/x-template" id="modal-template">
-            <transition name="modal">
-                <div class="modal-mask">
-                    <div class="modal-wrapper">
-                        <div class="modal-container">
-
-                            <div class="modal-header">
-                                <slot name="header">
-                                    Rename Image
-                                </slot>
-                            </div>
-
-                            <div class="modal-body">
-                                <slot name="body">
-                                    <ImageComponent></ImageComponent>
-                                </slot>
-                            </div>
-
-                            <div class="modal-footer">
-                                <slot name="footer">
-                                    default footer
-                                    <button class="modal-default-button" @click="$emit('close')">
-                                    OK
-                                    </button>
-                                </slot>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </transition>
-        </script>
-
-
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">

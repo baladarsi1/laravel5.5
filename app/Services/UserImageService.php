@@ -9,6 +9,7 @@
 namespace App\Services;
 use App\FileUpload;
 use App\User;
+use App\FileShares;
 
 
 class UserImageService
@@ -21,11 +22,12 @@ class UserImageService
         return $user->userImages;
     }
 
-    public function createUserImage($userId,$name)
+    public function createUserImage($userId,$uploadImage)
     {
         $image= new FileUpload();
-        $image->image_name = $name;
+        $image->image_name = basename($uploadImage);
         $image->user_id = $userId;
+        $image->path = basename($uploadImage);
         $image->save();
     }
 
@@ -46,4 +48,13 @@ class UserImageService
     {
         return FileUpload::find($imageId);
     }
+
+    public function shareUserImage($userImageId,$shareImageEmail)
+    {
+       $shareImage = new FileShares();
+       $shareImage->file_id = $userImageId;
+       $shareImage->email  = $shareImageEmail;
+       $shareImage->save();
+    }
+
 }

@@ -6,9 +6,12 @@ use App\Services\UserImageService;
 
 use Illuminate\Http\Request;
 
+use Validator;
+
 class ImageController extends Controller
 {
-    private $userUploadPath = 'images/';
+    private $userStoragePath = 'uploads';
+    private $userUploadPath = 'images';
 
     /** @var  imageService */
     protected $imageService;
@@ -22,27 +25,24 @@ class ImageController extends Controller
         $this->userImageService = $userImageService;
     }
 
-    private function getImagePath()
-    {
-        return public_path($this->userUploadPath);
-    }
-
     public function store(Request $request)
     {
         try
         {
-            if($request->get('image'))
+            if (count($request->images))
             {
-                $image = $request->get('image');
-                $imageName = getImageNameFromBrowserRequest($image);
-                $this->imageService->createImage($request->get('image'),$imageName,$this->getImagePath());
-                $this->userImageService->createUserImage($request->user()->id,$imageName);
+                foreach ($request->images as $image)
+                {
+                    $uploadImage = $this->imageService->createImage($image,$this->userStoragePath,$this->userUploadPath);
+                    $this->userImageService->createUserImage($request->user()->id,$uploadImage);
+                }
             }
 
             return response()->json(['success' => 'You have successfully uploaded an image'], 200);
         }
         catch (\Exception $e)
         {
+            \Log::error('user Image upload Errors' , [$e->getMessage()]);
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
@@ -110,6 +110,32 @@ class ImageController extends Controller
             \Log::error('update image' , [$e]);
             return response()->json(['error' => $e->getMessage()], 400);
         }
+    }
+
+    public function shareImage(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'shareEmail' => 'required|email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => "Please enter a valid email address"], 400);
+        }
+
+        $imageShareEmail = $request->input('shareEmail');
+
+        try
+        {
+            $this->userImageService->shareUserImage($id,$imageShareEmail);
+
+            return response()->json(['data' => 'You have successfully shared an image'], 200);
+        }
+        catch (\Exception $e)
+        {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+
+
     }
 
 }

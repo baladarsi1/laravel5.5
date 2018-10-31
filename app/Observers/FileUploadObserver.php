@@ -26,8 +26,10 @@ class FileUploadObserver
             // open an image file
             $img = \Image::make(public_path('images/'.$fileUpload->image_name));
 
-            // now you are able to resize the instance
-            $img->resize(50);
+            // resize the image to a width of 300 and constrain aspect ratio (auto height)
+            $img->resize(100, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
 
             // finally we save the image as a new file
             $img->save(public_path('images/thumbs/'.$fileUpload->image_name));

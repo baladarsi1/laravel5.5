@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "vue-router": "^3.0.1",
-        "vue2-bootstrap-modal": "^0.1.15"
+        "vue2-bootstrap-modal": "^0.1.15",
+        "vue-toastr": "^2.0.14"
     }
 }

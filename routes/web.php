@@ -45,4 +45,6 @@ Route::post('/user/image/updateImageName/{id}', 'ImageController@updateUserImage
 
 Route::post('/user/image/deleteImage/{id}', 'ImageController@deleteUserImage');
 
+Route::post('/user/image/shareImage/{id}', 'ImageController@shareImage');
+
 

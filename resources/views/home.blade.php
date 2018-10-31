@@ -7,7 +7,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">Dashboard</div>
 
@@ -20,7 +20,7 @@
 
                         <div id="app">
                             <h1>Hello App!</h1>
-                            <div class="col-md-6">
+                            <div class="col-md-2">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
                                         <router-link to="/foo" class="nav-link active">Go to Foo</router-link>
@@ -40,7 +40,7 @@
                                 </ul>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-10">
                                 <router-view></router-view>
                             </div>
 

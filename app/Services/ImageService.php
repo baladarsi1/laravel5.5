@@ -15,9 +15,9 @@ class ImageService
 
     protected $thumbsPath = "thumbs/";
 
-    public function createImage($requestImage,$imageName,$imagePath)
+    public function createImage($image,$storagePath,$uploadPath)
     {
-        \Image::make($requestImage)->save($imagePath.$imageName);
+        return $image->store($uploadPath,$storagePath);
     }
 
     public function editImage($imagePath,$oldName,$newName)

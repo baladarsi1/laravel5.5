@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="form-group">
-            <button id="show-modal" data-toggle="modal" data-target="#imageUploadModal">Upload new image</button>
+            <button id="show-modal" data-toggle="modal" class="btn btn-success pull-right" data-target="#imageUploadModal">Upload new image</button>
         </div>
 
         <div class="panel panel-default">
@@ -20,10 +20,10 @@
                     <tr v-for="image, index in images">
                         <td>{{ image.id }}</td>
                         <td>{{ image.image_name }}</td>
-                        <td><img :src="'images/thumbs/'+image.image_name"></td>
+                        <td><img :src="'images/thumbs/'+image.path"></td>
                         <td>
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">Dropdown Example
+                                <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">...
                                     <span class="caret"></span></button>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                     <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" :data-target="'#myShareModal' + image.id">Share</a></li>
@@ -47,10 +47,14 @@
                                             <h4 class="modal-title">Share Image</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <p>This is share model</p>
+                                            <p>
+                                                <input v-model="shareEmail" class="form-control" />
+                                            </p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-success"
+                                            @click="shareImage(image.id)">Share Now</button>
                                         </div>
                                     </div>
 
@@ -126,24 +130,14 @@
                                 <div class="card card-default">
                                     <div class="card-header">File Upload Component</div>
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-3" v-if="image">
-                                                <img :src="image" class="img-responsive" height="70" width="90">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="file" v-on:change="onImageChange" class="form-control">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success btn-block" @click="uploadImage">Upload Image</button>
-                                            </div>
-                                        </div>
+                                        <image-uploader></image-uploader>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" @click="completedImageUpload()">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
 
@@ -155,14 +149,20 @@
 
 <script>
 
+    import ImageUploader from '../images/ImageUploader';
+
     export default {
+        components: {
+            ImageUploader
+        },
         data: function () {
             return {
                 showModal: false,
                 showSecondModal: false,
                 images: [],
                 updatedImageName : '',
-                image: ''
+                image: '',
+                shareEmail : ''
             }
         },
         mounted() {
@@ -177,31 +177,6 @@
                 })
         },
         methods: {
-            onImageChange(e) {
-                let files = e.target.files || e.dataTransfer.files;
-                if (!files.length)
-                    return;
-                this.createImage(files[0]);
-            },
-            createImage(file) {
-                let reader = new FileReader();
-                let vm = this;
-                reader.onload = (e) => {
-                    vm.image = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            },
-            uploadImage(){
-                axios.post('/image/store',{image: this.image}).then(response => {
-                    if (response.data.success) {
-                        this.showModal = false;
-                        this.$router.push('ImagesIndex')
-                    }
-                    else{
-                        alert(response.data.error);
-                    }
-                });
-            },
             openModalGetImage(id){
                 //console.log(id);
                 axios.get('/user/image/' + id)
@@ -213,8 +188,22 @@
                         console.log(error); // run if we have error
                     });
             },
-            shareImage(id, index) {
-                this.showSecondModal = true;
+            shareImage(id){
+                axios.post('/user/image/shareImage/' + id, {
+                    shareEmail: this.shareEmail
+                })
+                    .then( (response) =>{
+                        if(response.status===200){
+                            this.$router.go(0);
+                        }
+                        else{
+                            alert(response.error);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error.response); // run if we have error
+                        alert(error.response.data.error);
+                    });
             },
             renameImage(id, index, imageName) {
                 this.showSecondModal = true;
@@ -245,11 +234,12 @@
                     .catch(function (error) {
                         console.log(error); // run if we have error
                     });
-            },
-            completedImageUpload() {
-                this.$router.go(0);
             }
         }
     }
 
 </script>
+
+<style lang="sass">
+    @import '~vue-toastr/src/vue-toastr.scss';
+</style>

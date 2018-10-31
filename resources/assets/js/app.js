@@ -11,12 +11,13 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import VueRouter from 'vue-router';
-import ImageComponent from './components/ImageuploadComponent.vue';
+import Toastr from 'vue-toastr';
+
 import CompaniesIndex from './components/companies/CompaniesIndex.vue';
 import ImagesIndex from './components/images/ImagesIndex.vue';
-import ImageEdit from './components/images/ImageEdit.vue';
 
 window.Vue.use(VueRouter);
+Vue.use(Toastr);
 
 const Foo = { template: '<div>foo</div>' }
 const Bar = { template: '<div>bar</div>' }
@@ -24,23 +25,13 @@ const Bar = { template: '<div>bar</div>' }
 const routes = [
     { path: '/foo', component: Foo },
     { path: '/bar', component: Bar },
-    { path: '/uploadImage', component: ImageComponent, name: ImageComponent},
     { path: '/companiesIndex', component: CompaniesIndex},
     { path: '/imagesIndex', component: ImagesIndex},
-    { path: '/imageEdit', component: ImageEdit},
 ]
 
 const router = new VueRouter({
     routes // short for `routes: routes`
 })
-
-// register modal component
-Vue.component('modal', {
-    template: '#modal-template'
-})
-
-Vue.component('ImageComponent' , ImageComponent);
-Vue.component('ImageEdit' , ImageEdit);
 
 const app = new Vue({
     router

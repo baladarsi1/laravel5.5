@@ -13,19 +13,12 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 import Toastr from 'vue-toastr';
 
-import CompaniesIndex from './components/companies/CompaniesIndex.vue';
 import ImagesIndex from './components/images/ImagesIndex.vue';
 
 window.Vue.use(VueRouter);
 Vue.use(Toastr);
 
-const Foo = { template: '<div>foo</div>' }
-const Bar = { template: '<div>bar</div>' }
-
 const routes = [
-    { path: '/foo', component: Foo },
-    { path: '/bar', component: Bar },
-    { path: '/companiesIndex', component: CompaniesIndex},
     { path: '/imagesIndex', component: ImagesIndex},
 ]
 

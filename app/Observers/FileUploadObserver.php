@@ -48,7 +48,7 @@ class FileUploadObserver
         try
         {
             // open an image file
-            $mainImg = \Image::make(public_path('images/'.$fileUpload->image_name));
+            $mainImg = \Image::make(public_path('images/'.$fileUpload->path));
 
             // finally delete the image
             $mainImg->destroy();
@@ -61,7 +61,7 @@ class FileUploadObserver
         try
         {
             // open an image thumb file
-            $thumbImg = \Image::make(public_path('images/thumbs/'.$fileUpload->image_name));
+            $thumbImg = \Image::make(public_path('images/thumbs/'.$fileUpload->path));
 
             // finally delete the image
             $thumbImg->destroy();

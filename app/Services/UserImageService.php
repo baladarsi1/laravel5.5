@@ -17,7 +17,7 @@ class UserImageService
 
     public function getAllUserImages($user)
     {
-        $user = User::find($user->id);
+        $user = User::with('userImages' , 'userImages.share')->find($user->id);
 
         return $user->userImages;
     }

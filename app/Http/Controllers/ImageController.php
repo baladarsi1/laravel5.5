@@ -85,8 +85,6 @@ class ImageController extends Controller
         try
         {
             $this->userImageService->updateUserImage($id,$newImageName);
-            $this->imageService->editImage($this->getImagePath(),$oldImageName,$newImageName);
-
             return response()->json(['data' => 'You have successfully uploaded an image'], 200);
         }
         catch (\Exception $e)

@@ -13,6 +13,7 @@
                         <th>Id</th>
                         <th>Name</th>
                         <th>Thumb</th>
+                        <th>Share Email</th>
                         <th widht="100">&nbsp;</th>
                     </tr>
                     </thead>
@@ -20,6 +21,7 @@
                     <tr v-for="image, index in images">
                         <td>{{ image.id }}</td>
                         <td>{{ image.image_name }}</td>
+                        <td><span v-if="image.share">{{ image.share.email }}</span> </td>
                         <td><img :src="'images/thumbs/'+image.path"></td>
                         <td>
                             <div class="dropdown">
@@ -28,7 +30,7 @@
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                     <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" :data-target="'#myShareModal' + image.id">Share</a></li>
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" :href="'images/'+image.image_name" download>
+                                        <a role="menuitem" tabindex="-1" :href="'images/'+image.path" download>
                                             Download
                                         </a>
                                     </li>

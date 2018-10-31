@@ -49,12 +49,4 @@ class UserTest extends TestCase
         // Assert a file does not exist...
         Storage::disk('public')->assertMissing('missing.jpg');
     }
-
-    public function testDatabase()
-    {
-        $user = factory(User::class)->make();
-        $userImages = factory(FileUpload::class)->make();
-
-
-    }
 }
